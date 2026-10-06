@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "updated": "2026-10-04",
+  "contacts": {
+    "fullName": "ИГОО ВДВ «Союз Десантников»",
+    "leader": "Председатель совета Таут Сергей Викторович",
+    "address": "627750, Тюменская обл., г. Ишим, ул. Ленина, д. 39",
+    "inn": "7224095731",
+    "kpp": "722401001",
+    "ogrn": "1257200011023 от 04.07.2025",
+    "email": "soyuz.vdvishim@mail.ru",
+    "phone": "",
+    "vk": "https://vk.ru/vdvishim"
+  },
+  "banner": {
+    "enabled": false,
+    "text": "",
+    "link": "",
+    "linkText": ""
+  },
+  "techMode": {
+    "enabled": false,
+    "text": ""
+  },
+  "hidden": [],
+  "schedule": [],
+  "pinnedPostId": null
+}
