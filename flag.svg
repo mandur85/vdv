@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG 1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 183.984 122.35" width="161.39mm" height="107.324mm">
+  <defs>
+    <style type="text/css">
+      .fil0 {fill:#ffffff} /* Белый */
+      .fil1 {fill:#0039A0} /* Синий */
+      .fil2 {fill:#D52B1E} /* Красный */
+    </style>
+  </defs>
+  
+  <!-- Триколор России (белый-синий-красный) -->
+  <rect x="0" y="0" width="183.984" height="40.7833" class="fil0"/>
+  <rect x="0" y="40.7833" width="183.984" height="40.7833" class="fil1"/>
+  <rect x="0" y="81.5666" width="183.984" height="40.7834" class="fil2"/>
+</svg>

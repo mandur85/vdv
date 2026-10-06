@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Управление — Союз десантников</title>
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" href="favicon-32x32.png" sizes="32x32">
+    <style>
+        /* [hidden] должен побеждать любые display из этого файла */
+        [hidden] { display: none !important; }
+
+        :root {
+            --bg-deep: #060e1a;
+            --bg-primary: #0a1628;
+            --bg-card: #0f1f38;
+            --accent-sky: #00b4d8;
+            --accent-gold: #d4af37;
+            --text-primary: #e8eef6;
+            --text-secondary: #8899aa;
+            --text-muted: #556677;
+            --border-subtle: rgba(0, 180, 216, 0.15);
+            --border-accent: rgba(0, 180, 216, 0.4);
+            --glow-sky: rgba(0, 180, 216, 0.3);
+            --glow-gold: rgba(212, 175, 55, 0.3);
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: url('best.webp') center center fixed;
+            background-size: cover;
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-sky); border-radius: 4px; }
+        ::-moz-scrollbar { width: 8px; }
+        ::-moz-scrollbar-track { background: var(--bg-deep); }
+        ::-moz-scrollbar-thumb { background: var(--accent-sky); border-radius: 4px; }
+        * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+
+        /* === НАВИГАЦИЯ === */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 1.5rem 3rem; display: flex; justify-content: flex-start; gap: 1.5rem; align-items: center;
+            transition: all 0.4s ease; background: transparent;
+        }
+        .nav__back {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            padding: 0.5rem 1.1rem; border: 1px solid rgba(0, 180, 216, 0.4); border-radius: 4px;
+            color: var(--text-primary); text-decoration: none; white-space: nowrap;
+            font-family: 'Oswald', sans-serif; font-size: 0.85rem; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+        }
+        .nav__back:hover { color: var(--accent-sky); border-color: var(--accent-sky); background: rgba(0, 180, 216, 0.1); }
+        .nav__back:focus-visible { outline: 2px solid var(--accent-sky); outline-offset: 2px; }
+        :focus{ outline: 2px solid var(--accent-sky); outline-offset: 2px; }
+        .nav__links { margin-left: auto; }
+        .nav.scrolled {
+            background: rgba(6, 14, 26, 0.95); -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            padding: 1rem 3rem; border-bottom: 1px solid var(--border-subtle);
+        }
+        .nav__logo {
+            font-family: 'Oswald', sans-serif; font-size: 0.9rem; font-weight: 600;
+            letter-spacing: 0.1em; color: var(--accent-gold); text-decoration: none;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .nav__links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav__link {
+            font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em;
+            color: var(--text-secondary); text-decoration: none; text-transform: uppercase;
+            position: relative; padding: 0.5rem 0; transition: color 0.3s ease;
+        }
+        .nav__link::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 2px; background: var(--accent-sky);
+            transition: width 0.3s ease;
+        }
+        .nav__link:hover { color: var(--accent-sky); }
+        .nav__link:hover::after { width: 100%; }
+        .nav__burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 0.5rem; background: none; border: none; }
+        .nav__burger span { width: 25px; height: 2px; background: var(--text-primary); }
+
+        /* === HERO === */
+        .hero {
+            position: relative; min-height: 100vh;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+
+        .hero__overlay {
+            position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(6, 14, 26, 0.4) 0%, rgba(6, 14, 26, 0.7) 50%, rgba(6, 14, 26, 1) 100%);
+            z-index: 1;
+        }
+        .hero__grid {
+            position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+            inset: 0; z-index: 2;
+            background-image: linear-gradient(rgba(0, 180, 216, 0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 180, 216, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        .hero__wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .hero__logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero__logo img {
+            max-width: 384px;
+            height: auto;
+        }
+        .hero__content {
+            position: relative; z-index: 3; text-align: center; padding: 2rem; max-width: 900px;
+        }
+        .hero__title {
+            font-size: clamp(3rem, 8vw, 6rem); font-weight: 700; letter-spacing: 0.08em;
+            color: var(--text-primary); margin-bottom: 1.5rem;
+            opacity: 0; animation: fadeInUp 0.8s ease forwards 0.4s;
+        }
+        .hero__title-accent { color: var(--accent-sky); text-shadow: 0 0 40px var(--glow-sky); }
+        .hero__subtitle {
+            font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 300;
+            color: var(--text-secondary); letter-spacing: 0.15em; margin-bottom: 3rem;
+            opacity: 0; animation: fadeInUp 0.8s ease forwards 0.6s;
+        }
+
+        /* === АНИМАЦИИ === */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+
+        /* === СЕКЦИИ === */
+        .section { padding: 8rem 3rem; }
+        .section__container { max-width: 1200px; margin: 0 auto; }
+        .section__header { margin-bottom: 4rem; }
+        .section__tag {
+            font-size: 0.7rem; font-weight: 500; letter-spacing: 0.3em;
+            color: var(--accent-gold); text-transform: uppercase; margin-bottom: 1rem;
+        }
+        .section__title {
+            font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700;
+            letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 1rem;
+        }
+        .section__line { width: 60px; height: 3px; background: linear-gradient(90deg, var(--accent-sky), transparent); margin-top: 1.5rem; }
+
+        /* === О НАС === */
+        .values-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem; }
+        .value-card {
+            background: var(--bg-card); border: 1px solid var(--border-subtle);
+            padding: 2.5rem; position: relative; overflow: hidden; transition: all 0.4s ease;
+        }
+        .value-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--accent-sky), transparent);
+            transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+        }
+        .value-card:hover {
+            background: rgba(15, 31, 56, 0.98); border-color: rgba(0, 180, 216, 0.25);
+            transform: translateY(-5px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        .value-card:hover::before { transform: scaleX(1); }
+        .value-card__number { font-family: 'Oswald', sans-serif; font-size: 3rem; font-weight: 700; color: rgba(0, 180, 216, 0.15); margin-bottom: 1.5rem; }
+        .value-card__title { font-family: 'Oswald', sans-serif; font-size: 1.25rem; font-weight: 600; letter-spacing: 0.1em; color: var(--text-primary); margin-bottom: 1rem; }
+        .value-card__text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8; }
+
+        /* === МИССИЯ === */
+        .mission { background: var(--bg-primary); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle); }
+        .mission__content { max-width: 800px; margin: 0 auto; text-align: center; }
+        .mission__quote { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 400; color: var(--text-primary); line-height: 1.4; margin-bottom: 2rem; }
+        .mission__quote-accent { color: var(--accent-sky); text-shadow: 0 0 20px var(--glow-sky); }
+
+        /* === ЭМБЛЕМЫ === */
+        .emblems-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; }
+        .emblem {
+            background: var(--bg-card); border: 1px solid var(--border-subtle);
+            padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem;
+            align-items: center; justify-content: center;
+            aspect-ratio: 1; border-radius: 12px; transition: all 0.3s ease;
+            width: 160px; height: 160px;
+            margin: 0 auto;
+        }
+        .emblem:hover { border-color: var(--accent-gold); box-shadow: 0 0 40px var(--glow-gold); transform: scale(1.05); }
+        .emblem img {
+            max-width: 100%; max-height: 96px; width: auto; height: auto;
+            object-fit: contain; filter: drop-shadow(0 0 10px var(--glow-sky));
+        }
+        .emblem__label { font-family: 'Oswald', sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em; color: var(--text-primary); text-align: center; text-transform: uppercase; }
+
+        /* === НОВОСТИ === */
+        .news-list { display: flex; flex-direction: column; gap: 2rem; }
+        .news-item {
+            display: grid; grid-template-columns: 200px 1fr;
+            background: var(--bg-card); border: 1px solid var(--border-subtle);
+            padding: 2rem; transition: all 0.3s ease; position: relative;
+        }
+        .news-item:hover { border-color: var(--border-accent); transform: translateX(5px); }
+        .news-item__date { font-size: 0.75rem; color: var(--accent-gold); letter-spacing: 0.1em; }
+        .news-item__title { font-size: 1.25rem; font-weight: 500; color: var(--text-primary); margin: 0.5rem 0; }
+        .news-item__text { font-size: 0.85rem; color: var(--text-secondary); }
+        .news-item__more { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .news-item__more p { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle); }
+        .news-item.expanded .news-item__more { max-height: 500px; }
+        .news-item__badge {
+            display: inline-block; padding: 0.2rem 0.6rem; margin-bottom: 0.5rem;
+            border: 1px solid var(--accent-sky); color: var(--accent-sky);
+            font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+            letter-spacing: 0.15em; text-transform: uppercase;
+        }
+        .news-item__badge--event { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .news-item__link { color: inherit; text-decoration: none; }
+        .news-item__link:hover { color: var(--accent-sky); }
+
+        /* === КОНТАКТЫ === */
+        .contact { background: var(--bg-primary); border-top: 1px solid var(--border-subtle); }
+        .contact__grid { display: grid; grid-template-columns: 1fr 0.6fr; gap: 2rem; }
+        .contact__info { display: flex; flex-direction: column; gap: 2rem; }
+        .contact__item { display: flex; flex-direction: column; gap: 0.5rem; }
+        .contact__label { font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 0.1em; text-transform: uppercase; }
+        .contact__value { font-size: 1rem; color: var(--text-primary); }
+        .contact__form { display: flex; flex-direction: column; gap: 1.5rem; width: 100%; }
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.05em; }
+        .form-group input, .form-group textarea {
+            background: var(--bg-card); border: 1px solid var(--border-subtle);
+            padding: 1rem; color: var(--text-primary); font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem; transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--accent-sky); box-shadow: 0 0 20px var(--glow-sky);
+        }
+        .form-group textarea { min-height: 150px; resize: vertical; }
+        .btn-submit {
+            padding: 1rem 2.5rem; background: transparent; border: 1px solid var(--accent-sky);
+            color: var(--accent-sky); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+            font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-submit:hover { background: var(--accent-sky); color: var(--bg-deep); box-shadow: 0 0 30px var(--glow-sky); }
+        .form-note { font-size: 0.75rem; color: var(--text-muted); line-height: 1.6; }
+        .form-note a { color: var(--accent-sky); }
+
+        /* === ФУТЕР === */
+        footer {
+            padding: 3rem; text-align: center;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .footer__logo { font-family: 'Oswald', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--accent-gold); margin-bottom: 1rem; }
+        .footer__text { font-size: 0.85rem; color: var(--text-primary); }
+
+        /* prefers-reduced-motion */
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+
+        /* Мобильная адаптация */
+        @media (max-width: 768px) {
+        .nav { padding: 0.5rem 1rem; flex-wrap: wrap; gap: 0.75rem; }
+        .nav__back { padding: 0.4rem 0.7rem; font-size: 0.75rem; letter-spacing: 0.08em; }
+        .nav__logo { font-size: 0.7rem; gap: 0.2rem; }
+        .nav__logo img { width: 20px; height: 20px; }
+        .nav__links { display: none; }
+        .nav--open .nav__links {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(6, 14, 26, 0.95);
+            padding: 2rem;
+        }
+        .nav__burger { display: flex; }
+        body { background: url('best.webp') center top no-repeat; background-size: cover; }
+        .hero { min-height: 100vh; padding: 2rem 1rem; }
+        .hero__wrapper { display: flex; flex-direction: column; gap: 1rem; }
+        .hero__logo { order: 1; justify-content: center; }
+        .hero__content { order: 2; }
+        .hero__logo img { max-width: 240px; height: auto; }
+        .hero__title { font-size: 1.5rem; }
+        .hero__subtitle { font-size: 1rem; }
+        .section { padding: 3rem 1rem; }
+        .section__title { font-size: 1.5rem; }
+        .values-grid { grid-template-columns: 1fr; }
+        .emblems-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+        .emblem { padding: 1rem; }
+        .emblem img { max-height: 76px; }
+        .emblem__label { font-size: 0.7rem; }
+        .contact__grid { grid-template-columns: 1fr; }
+        .news-item { grid-template-columns: 1fr; padding: 1.5rem; }
+        .news-item__date { font-size: 0.75rem; }
+        .news-item__title { font-size: 1rem; }
+        footer { padding: 2rem 1rem; }
+        .footer__logo { font-size: 1.2rem; }
+        .page-hero { padding: 6rem 1rem 2rem; min-height: 34vh; }
+        }
+
+@media (max-width: 480px) {
+        .nav { padding: 0.4rem 0.6rem; gap: 0.5rem; }
+        .nav__back { padding: 0.3rem 0.55rem; font-size: 0.68rem; }
+        .nav__logo img { width: 16px; height: 16px; }
+        }
+/* BUILD:STYLES */
+        /* обложка внутри карточки */
+        .news-item__cover { display: block; margin: 0 0 1rem; border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden; transition: border-color 0.3s ease; }
+        .news-item__cover:hover { border-color: var(--accent-gold); }
+        .news-item__cover img { display: block; width: 100%; height: 240px; object-fit: cover; }
+
+        /* подробный текст записи */
+        .news-item__detail { margin-top: 0.9rem; font-family: 'Roboto', sans-serif; font-size: 0.95rem; line-height: 1.7; color: var(--text-secondary); }
+        .news-item__detail p { margin: 0 0 0.75rem; }
+        .news-item__detail p:last-child { margin-bottom: 0; }
+
+        /* ссылка на фотографии записи */
+        .news-item__photos-link { display: inline-block; margin-top: 1rem; font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 0.06em; color: var(--accent-gold); text-decoration: none; border-bottom: 1px solid rgba(0, 180, 216, 0.4); }
+        .news-item__photos-link:hover { color: var(--text-primary); border-color: var(--accent-gold); }
+
+        /* когда в фильтре ничего не нашлось */
+        .empty-state { padding: 1.5rem 0; font-family: 'Oswald', sans-serif; font-size: 1rem; color: var(--text-secondary); }
+/* BUILD:NEWSPAGE */
+        /* шапка страницы новостей */
+        .page-hero { padding: 6rem 1rem 2rem; min-height: 34vh; }
+        .page-hero__title { margin: 0; font-family: 'Oswald', sans-serif; font-size: clamp(1.9rem, 4.5vw, 3rem); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-primary); }
+
+        /* фильтр типов записей */
+        .filter { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2.5rem; }
+        .filter__btn { padding: 0.6rem 1.2rem; font-family: 'Oswald', sans-serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-primary); background: transparent; border: 1px solid rgba(0, 180, 216, 0.45); border-radius: 4px; cursor: pointer; transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease; }
+        .filter__btn:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        .filter__btn:focus-visible { outline: 2px solid var(--accent-gold); outline-offset: 2px; }
+        :focus{ outline: 2px solid var(--accent-gold); outline-offset: 2px; }
+        .filter__btn[aria-pressed="true"] { background: var(--accent-gold); border-color: var(--accent-gold); color: #0a1119; }
+
+        /* ---------- страница администрирования ---------- */
+        body { display: flex; align-items: flex-start; justify-content: center;
+               padding: 4rem 1.25rem 5rem; }
+        .admin { width: 100%; max-width: 640px; }
+        .admin__card { border: 1px solid var(--border-color); border-radius: 6px;
+                       background: rgba(6, 14, 26, 0.72); padding: 2rem; }
+        .admin__title { font-family: 'Oswald', sans-serif; font-size: 1.4rem;
+                        letter-spacing: 0.06em; color: var(--text-primary);
+                        margin: 0 0 0.35rem; }
+        .admin__sub { font-family: 'Roboto', sans-serif; font-size: 0.9rem;
+                      color: var(--text-secondary); margin: 0 0 1.75rem; }
+        .admin__row { display: grid; grid-template-columns: 1fr; gap: 1rem;
+                      margin-bottom: 1.25rem; }
+        .admin__row--actions { display: flex; flex-wrap: wrap; gap: 0.75rem;
+                               align-items: center; }
+        .admin__label { display: block; font-family: 'Oswald', sans-serif;
+                        font-size: 0.8rem; letter-spacing: 0.1em;
+                        text-transform: uppercase; color: var(--text-secondary);
+                        margin-bottom: 0.4rem; }
+        .admin__input { width: 100%; padding: 0.7rem 0.85rem; font-size: 1rem;
+                        font-family: 'Roboto', sans-serif; color: var(--text-primary);
+                        background: rgba(255, 255, 255, 0.05);
+                        border: 1px solid var(--border-color); border-radius: 4px; }
+        .admin__input:focus { outline: none; border-color: var(--accent-gold); }
+        .admin__btn { padding: 0.7rem 1.4rem; font-family: 'Oswald', sans-serif;
+                      font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+                      color: var(--text-primary); background: transparent;
+                      border: 1px solid var(--accent-gold); border-radius: 4px;
+                      cursor: pointer; transition: background 0.3s ease, color 0.3s ease; }
+        .admin__btn:hover:not(:disabled) { background: var(--accent-gold); color: #0a1119; }
+        .admin__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .admin__btn--ghost { border-color: var(--border-color); }
+        .admin__btn--danger { border-color: #b23b3b; color: #e08a8a; }
+        .admin__btn--danger:hover:not(:disabled) { background: #b23b3b; color: #fff; }
+        .admin__msg { margin: 0 0 1rem; font-family: 'Roboto', sans-serif;
+                      font-size: 0.9rem; min-height: 1.2em; }
+        .admin__msg--error { color: #e08a8a; }
+        .admin__msg--ok { color: var(--accent-gold); }
+        .admin__account { border-top: 1px solid var(--border-color); padding: 1.5rem 0; }
+        .admin__account:first-of-type { border-top: none; }
+        .admin__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+                       margin-bottom: 0.9rem; }
+        .admin__note { margin-top: 1.75rem; padding-top: 1.25rem;
+                       border-top: 1px solid var(--border-color);
+                       font-family: 'Roboto', sans-serif; font-size: 0.82rem;
+                       line-height: 1.6; color: var(--text-secondary); }
+        .admin__count { font-family: 'Oswald', sans-serif; font-size: 0.8rem;
+                        letter-spacing: 0.08em; color: var(--text-secondary); }
+        .admin__lock { margin-top: 0.75rem; font-family: 'Roboto', sans-serif;
+                       font-size: 0.85rem; color: #e08a8a; }
+    
+
+        /* === ЗОНЫ НАЖАТИЯ: не ниже 40px (удобно пальцем) === */
+        .nav__logo { min-height: 44px; }
+        .nav__link { display: inline-flex; align-items: center; min-height: 44px; }
+        .nav__back { display: inline-flex; align-items: center; min-height: 44px; }
+        .nav__burger { min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+        .news-item__link { display: flex; align-items: center; min-height: 44px; }
+        .news-item__toggle { min-height: 44px; }
+        .news-filter__btn, .filter__btn, .news-filters button { min-height: 44px; }
+        footer a, .footer a { display: inline-block; padding: 0.5rem 0; min-height: 40px; }
+</style>
+</head>
+<body>
+    <main class="admin">
+
+        <!-- вход -->
+        <section class="admin__card" id="gate">
+            <h1 class="admin__title">Вход для администратора</h1>
+            <p class="admin__sub">Введите логин и пароль, заданные в этом браузере.</p>
+            <div class="admin__row">
+                <div>
+                    <label class="admin__label" for="login">Логин</label>
+                    <input class="admin__input" type="text" id="login" autocomplete="username" required>
+                </div>
+                <div>
+                    <label class="admin__label" for="pass">Пароль</label>
+                    <input class="admin__input" type="password" id="pass" autocomplete="current-password" required>
+                </div>
+            </div>
+            <p class="admin__msg" id="gate-msg" role="status" aria-live="polite"></p>
+            <button class="admin__btn" type="button" id="gate-btn">ВОЙТИ</button>
+        </section>
+
+        <!-- управление -->
+        <section class="admin__card" id="panel" hidden>
+            <h1 class="admin__title">Учётные данные</h1>
+            <p class="admin__sub">
+                Секретов здесь нет: пароль хранится только в этом браузере и никогда
+                не показывается. Для смены введите новый пароль в поле.
+            </p>
+            <p class="admin__msg" id="panel-msg" role="status" aria-live="polite"></p>
+
+            <div id="accounts"></div>
+
+            <div class="admin__row admin__row--actions">
+                <button class="admin__btn admin__btn--ghost" type="button" id="add-btn">ДОБАВИТЬ УЧЁТКУ</button>
+                <span class="admin__count" id="count"></span>
+                <button class="admin__btn admin__btn--danger" type="button" id="logout-btn">ВЫЙТИ</button>
+            </div>
+
+            <p class="admin__note">
+                Учётные записи и пароли хранятся только в этом браузере на этом устройстве.
+                Очистка данных сайта удалит их безвозвратно, а на другом устройстве
+                потребуется задать пароль заново. Такая схема скрывает админку от обычного
+                посетителя, но не заменяет настоящую серверную защиту.
+            </p>
+        </section>
+
+    </main>
+
+    <script src="js/credentials.js"></script>
+    <script>
+        var C = window.Credentials;
+
+        var gate = document.getElementById('gate');
+        var panel = document.getElementById('panel');
+        var gateMsg = document.getElementById('gate-msg');
+        var panelMsg = document.getElementById('panel-msg');
+        var accountsBox = document.getElementById('accounts');
+        var countEl = document.getElementById('count');
+        var addBtn = document.getElementById('add-btn');
+
+        function say(el, text, kind) {
+            el.textContent = text || '';
+            el.className = 'admin__msg' + (kind ? ' admin__msg--' + kind : '');
+        }
+
+        var MESSAGES = {
+            wrong: 'Неверный логин или пароль.',
+            locked: function (s) { return 'Слишком много попыток. Подождите ' + s + ' с.'; },
+            empty: 'Введите логин и пароль.',
+            missing: 'Учётная запись не найдена.',
+            taken: 'Такой логин уже занят.',
+            short: 'Пароль короче ' + C.minPasswordLength() + ' символов.',
+            long: 'Пароль длиннее ' + C.maxPasswordLength() + ' символов.',
+            chars: 'Разрешены только латинские буквы, цифры и символы . ! ? _',
+            digit: 'В пароле нужна хотя бы одна цифра.',
+            symbol: 'В пароле нужен символ . ! ? или _',
+            emptyLogin: 'Введите логин.',
+            emptyPassword: 'Введите новый пароль.',
+            full: 'Больше ' + C.maxAccounts() + ' учётных записей добавить нельзя.',
+            storage: 'Браузер не разрешает сохранять данные.'
+        };
+        function reasonText(r) {
+            return typeof MESSAGES[r] === 'function' ? MESSAGES[r](r.seconds) : (MESSAGES[r] || 'Ошибка.');
+        }
+
+        // Пароля по умолчанию не существует. Пока учётных записей в браузере
+        // нет, сказать об этом прямо, а не просить придумать пароль на пустом месте.
+        if (!C.list().length) {
+            gateMsg.textContent = 'В этом браузере ещё нет учётной записи. ' +
+                'Вернитесь на главную страницу и войдите шестью кликами по эмблеме.';
+        }
+
+        function render() {
+            var list = C.list();
+            accountsBox.innerHTML = '';
+            list.forEach(function (acc) {
+                accountsBox.appendChild(buildRow(acc));
+            });
+            countEl.textContent = list.length + ' из ' + C.maxAccounts();
+            addBtn.disabled = !C.hasRoom();
+        }
+
+        function buildRow(acc) {
+            var row = document.createElement('div');
+            row.className = 'admin__account';
+            row.innerHTML =
+                '<div class="admin__grid">' +
+                '<div><label class="admin__label">Логин</label>' +
+                '<input class="admin__input js-login" type="text" autocomplete="off"></div>' +
+                '<div><label class="admin__label">Новый пароль</label>' +
+                '<input class="admin__input js-pass" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="new-password"></div>' +
+                '</div>' +
+                '<div class="admin__row admin__row--actions">' +
+                '<button class="admin__btn js-save" type="button">СОХРАНИТЬ</button>' +
+                '<button class="admin__btn admin__btn--ghost js-remove" type="button">УДАЛИТЬ</button>' +
+                '</div>';
+            row.querySelector('.js-login').value = acc.login;
+            row.querySelector('.js-save').addEventListener('click', function () {
+                C.save(acc.login,
+                       row.querySelector('.js-login').value,
+                       row.querySelector('.js-pass').value).then(function (res) {
+                    if (!res.ok) { say(panelMsg, reasonText(res.reason), 'error'); return; }
+                    say(panelMsg, 'Сохранено.', 'ok');
+                    render();
+                });
+            });
+            row.querySelector('.js-remove').addEventListener('click', function () {
+                if (!C.remove(acc.login)) {
+                    say(panelMsg, 'Последнюю учётную запись удалить нельзя.', 'error');
+                    return;
+                }
+                say(panelMsg, 'Удалено.', 'ok');
+                render();
+            });
+            return row;
+        }
+
+        function showGate() {
+            gate.hidden = false;
+            panel.hidden = true;
+            document.getElementById('login').value = '';
+            document.getElementById('pass').value = '';
+        }
+
+        function showPanel() {
+            gate.hidden = true;
+            panel.hidden = false;
+            say(panelMsg, '');
+            render();
+        }
+
+        function tryLogin() {
+            var login = document.getElementById('login').value;
+            var pass = document.getElementById('pass').value;
+            C.verify(login, pass, '').then(function (res) {
+                if (!res.ok) { say(gateMsg, reasonText(res.reason), 'error'); return; }
+                C.startSession(res.login);
+                say(gateMsg, '');
+                showPanel();
+            });
+        }
+
+        document.getElementById('gate-btn').addEventListener('click', tryLogin);
+        document.getElementById('pass').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') { e.preventDefault(); tryLogin(); }
+        });
+
+        addBtn.addEventListener('click', function () {
+            var login = window.prompt('Логин новой учётной записи');
+            if (login === null) { return; }
+            var pass = window.prompt('Пароль новой учётной записи');
+            if (pass === null) { return; }
+            C.add(login, pass).then(function (res) {
+                if (!res.ok) { say(panelMsg, reasonText(res.reason), 'error'); return; }
+                say(panelMsg, 'Учётная запись добавлена.', 'ok');
+                render();
+            });
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', function () {
+            C.endSession();
+            showGate();
+        });
+
+        if (C.session()) { showPanel(); } else { showGate(); }
+    </script>
+</body>
+</html>

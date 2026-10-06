@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История ВДВ — Союз Десантников</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* [hidden] должен побеждать любые display из этого файла */
+        [hidden] { display: none !important; }
+
+        :root {
+            --bg-deep: #060e1a;
+            --bg-card: #0f1f38;
+            --accent-sky: #00b4d8;
+            --accent-gold: #d4af37;
+            --text-primary: #e8eef6;
+            --text-secondary: #8899aa;
+            --text-muted: #556677;
+            --border-subtle: rgba(0, 180, 216, 0.15);
+            --border-accent: rgba(0, 180, 216, 0.4);
+            --glow-sky: rgba(0, 180, 216, 0.3);
+            --glow-gold: rgba(212, 175, 55, 0.3);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: url('gen_wide_1790967034_upwide.png') center center fixed;
+            background-size: cover;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-sky); border-radius: 4px; }
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 1.5rem 3rem; display: flex; justify-content: flex-start; gap: 1.5rem; align-items: center;
+            background: rgba(6, 14, 26, 0.95); -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .nav__back {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            padding: 0.5rem 1.1rem; border: 1px solid rgba(0, 180, 216, 0.4); border-radius: 4px;
+            color: var(--text-primary); text-decoration: none; white-space: nowrap;
+            font-family: 'Oswald', sans-serif; font-size: 0.85rem; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+        }
+        .nav__back:hover { color: var(--accent-sky); border-color: var(--accent-sky); background: rgba(0, 180, 216, 0.1); }
+        .nav__back:focus-visible { outline: 2px solid var(--accent-sky); outline-offset: 2px; }
+        :focus{ outline: 2px solid var(--accent-sky); outline-offset: 2px; }
+        .nav__links { margin-left: auto; }
+        .nav__logo {
+            font-family: 'Oswald', sans-serif; font-size: 1.25rem; font-weight: 700;
+            letter-spacing: 0.15em; color: var(--accent-gold); text-decoration: none;
+            display: flex; align-items: center; gap: 0.75rem;
+        }
+        .nav__back:hover { color: var(--accent-sky); }
+        .hero {
+            min-height: 40vh; position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            padding-top: 6rem;
+        }
+        .hero__overlay {
+            position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(6, 14, 26, 0.6) 0%, rgba(6, 14, 26, 0.9) 100%);
+        }
+        .hero__content {
+            position: relative; z-index: 2; text-align: center; padding: 2rem;
+        }
+        .hero__title {
+            font-size: clamp(2rem, 5vw, 4rem); font-weight: 700;
+            letter-spacing: 0.05em; color: var(--text-primary);
+        }
+        .hero__title-accent { color: var(--accent-gold); }
+        .section { padding: 10rem 3rem; }
+        .section__container { max-width: 1000px; margin: 0 auto; }
+        .section__header { margin-bottom: 3rem; }
+        .section__tag {
+            font-size: 0.7rem; font-weight: 500; letter-spacing: 0.3em;
+            color: var(--accent-gold); text-transform: uppercase; margin-bottom: 1rem;
+        }
+        .section__title {
+            font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 700;
+            letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: 1rem;
+        }
+        .section__line {
+            width: 60px; height: 3px;
+            background: linear-gradient(90deg, var(--accent-sky), transparent);
+            margin-top: 1.5rem;
+        }
+        .card {
+            background: rgba(15, 31, 56, 0.95); -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle); padding: 3rem; border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        .card__title {
+            font-family: 'Oswald', sans-serif; font-size: 1.5rem; font-weight: 600;
+            letter-spacing: 0.1em; color: var(--accent-sky); margin-bottom: 1.5rem;
+        }
+        .card__text {
+            font-size: 0.95rem; color: var(--text-primary); line-height: 1.8;
+        }
+        .card__text p { margin-bottom: 1rem; }
+
+        /* ЛИДЕРЫ ВДВ — две карточки на одном уровне */
+        .leaders-grid {
+            display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 2rem; align-items: start;
+            --leader-photo-h: min(849px, 68vh);
+        }
+        .leader-card {
+            background: rgba(15, 31, 56, 0.95); -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-subtle); border-radius: 12px;
+            padding: 2rem; display: flex; flex-direction: column; height: 100%;
+        }
+        .leader-card__photo {
+            width: auto; height: auto; max-width: 100%;
+            max-height: var(--leader-photo-h); object-fit: contain;
+            display: block; margin: 0 auto 1.5rem;
+            border-radius: 8px;
+            border: 2px solid var(--accent-sky);
+        }
+        .leader-card--gold .leader-card__photo { border-color: var(--accent-gold); }
+        .leader-card__role {
+            font-family: 'Oswald', sans-serif; font-size: 1.35rem; font-weight: 600;
+            letter-spacing: 0.08em; color: var(--accent-sky); margin-bottom: 1rem;
+        }
+        .leader-card--gold .leader-card__role { color: var(--accent-gold); }
+        .leader-card__name {
+            font-size: 1.05rem; color: var(--accent-gold); font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .leader-card__text {
+            font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8;
+        }
+        .leader-card__text p { margin-bottom: 1rem; }
+        .leader-card__quote {
+            font-style: italic; color: var(--text-primary);
+            border-left: 2px solid var(--accent-gold); padding-left: 1rem;
+        }
+        .timeline {
+            position: relative; padding-left: 3rem;
+        }
+        .timeline::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 2px; background: var(--accent-sky);
+        }
+        .timeline-item {
+            position: relative; margin-bottom: 3rem; padding-left: 2rem;
+        }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -3rem; top: 0.5rem;
+            width: 12px; height: 12px; background: var(--accent-gold);
+            border-radius: 50%; border: 2px solid var(--bg-deep);
+        }
+        .timeline-item__date {
+            font-family: 'Oswald', sans-serif; font-size: 1.25rem; font-weight: 600;
+            color: var(--accent-gold); margin-bottom: 0.5rem;
+        }
+        .timeline-item__title {
+            font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 500;
+            color: var(--text-primary); margin-bottom: 0.5rem;
+        }
+        .timeline-item__text {
+            font-size: 0.9rem; color: var(--text-primary); line-height: 1.7;
+        }
+        footer {
+            padding: 3rem; text-align: center;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .footer__text { font-size: 0.85rem; color: #fff; }
+        @media (max-width: 768px) {
+        .nav { padding: 0.5rem 1rem; flex-wrap: wrap; gap: 0.75rem; }
+        .nav__back { padding: 0.4rem 0.7rem; font-size: 0.75rem; letter-spacing: 0.08em; }
+        .nav__logo { font-size: 0.7rem; gap: 0.2rem; }
+        .nav__logo img { width: 20px; height: 20px; }
+        .section { padding: 2rem 1rem; }
+        .hero { min-height: 100vh; padding: 2.5rem 1rem; }
+        .hero__title { font-size: 1.5rem; }
+        .card { padding: 1.5rem; }
+        .card__title { font-size: 1.1rem; }
+        .card__text { font-size: 0.9rem; }
+        .leaders-grid { grid-template-columns: 1fr; gap: 1.5rem; --leader-photo-h: min(560px, 46vh); }
+        .leader-card { padding: 1.5rem; }
+        .leader-card__role { font-size: 1.15rem; }
+        .card__text p, .card__text { color: #000000 !important; }
+        .timeline__year { color: #000000 !important; }
+        .timeline__content p { color: #000000 !important; }
+        }
+
+@media (max-width: 480px) {
+        .nav { padding: 0.4rem 0.6rem; gap: 0.5rem; }
+        .nav__back { padding: 0.3rem 0.55rem; font-size: 0.68rem; }
+        .nav__logo img { width: 16px; height: 16px; }
+        }
+
+        /* сетка эмблем: три ряда по три */
+        .emblems-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; margin-top: 2rem; min-width: 0; }
+
+        /* карточка эмблемы (было инлайном) */
+        .emblems-grid .emblem { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 2rem; min-width: 0; background: rgba(15, 31, 56, 0.95); border: 1px solid rgba(0, 180, 216, 0.15); border-radius: 12px; text-decoration: none; overflow-wrap: anywhere; }
+
+        /* эмблема сжимается вместе с колонкой */
+        .emblems-grid .emblem img { display: block; width: 100%; max-width: 120px; height: auto; }
+
+        /* подпись эмблемы (было инлайном) */
+        .emblems-grid .emblem span { font-family: 'Oswald', sans-serif; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.1em; color: var(--text-primary); text-align: center; text-transform: uppercase; }
+
+
+        /* === ЗОНЫ НАЖАТИЯ: не ниже 40px (удобно пальцем) === */
+        .nav__logo { min-height: 44px; }
+        .nav__link { display: inline-flex; align-items: center; min-height: 44px; }
+        .nav__back { display: inline-flex; align-items: center; min-height: 44px; }
+        .nav__burger { min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+        .news-item__link { display: flex; align-items: center; min-height: 44px; }
+        .news-item__toggle { min-height: 44px; }
+        .news-filter__btn, .filter__btn, .news-filters button { min-height: 44px; }
+        footer a, .footer a { display: inline-block; padding: 0.5rem 0; min-height: 40px; }
+
+
+        /* === ЭМБЛЕМЫ НА УЗКИХ ЭКРАНАХ (после базовых правил) === */
+        @media (max-width: 768px) {
+            .emblems-grid { gap: 1rem; }
+            .emblems-grid .emblem { padding: 1rem; gap: 0.75rem; }
+            .emblems-grid .emblem img { max-width: 100%; }
+            .emblems-grid .emblem span { font-size: 0.75rem; letter-spacing: 0.06em; }
+        }
+        @media (max-width: 480px) {
+            .emblems-grid { gap: 0.75rem; }
+            .emblems-grid .emblem { padding: 0.75rem; }
+            .emblems-grid .emblem img { max-width: 72px; }
+            .emblems-grid .emblem span { font-size: 0.68rem; }
+        }
+</style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="index.html" class="nav__back">← НАЗАД</a>
+        <a href="index.html" class="nav__logo">
+            <img src="flag.svg" alt="Флаг России" width="28" height="28">
+            <img src="emblem-vdv.webp" alt="Эмблема ВДВ" width="28" height="28">
+            <img src="USSR_Airborn_troops_flag.svg" alt="Флаг ВДВ" width="28" height="28">
+            СОЮЗ ДЕСАНТНИКОВ ГОРОДА ИШИМА
+        </a>
+    </nav>
+    <section class="hero">
+        <div class="hero__overlay"></div>
+        <div class="hero__content">
+            <h1 class="hero__title"><span class="hero__title-accent">ИСТОРИЯ</span> ВОЗДУШНО-ДЕСАНТНЫХ ВОЙСК</h1>
+        </div>
+    </section>
+    <!-- ЛИДЕРЫ ВДВ -->
+    <section class="section">
+        <div class="section__container">
+            <div class="section__header">
+                <p class="section__tag">// КАРТОЧКИ</p>
+                <h2 class="section__title">ЛИДЕРЫ ВДВ</h2>
+                <div class="section__line"></div>
+            </div>
+            <div class="leaders-grid">
+                <div class="leader-card">
+                    <img class="leader-card__photo" src="commander_teplichiy.jpg" alt="Генерал-полковник Теплицкий Александр Васильевич" width="853" height="1280">
+                    <h3 class="leader-card__role">Командующий ВДВ</h3>
+                    <p class="leader-card__name">Генерал-полковник Теплицкий Александр Васильевич</p>
+                    <div class="leader-card__text">
+                        <p>Командующий Воздушно-десантными войсками Российской Федерации. Назначен на должность в 2023 году. Под его руководством ВДВ проходят масштабные реформы и модернизацию.</p>
+                    </div>
+                </div>
+                <div class="leader-card leader-card--gold">
+                    <img class="leader-card__photo" src="margelov.jpg" alt="Генерал армии Маргелов Василий Филиппович" width="640" height="849">
+                    <h3 class="leader-card__role">Основатель ВДВ</h3>
+                    <p class="leader-card__name">Генерал армии Маргелов Василий Филиппович</p>
+                    <div class="leader-card__text">
+                        <p>Командующий ВДВ СССР с 1954 по 1976 год. Именно он заложил основы современной доктрины ВДВ, создал систему подготовки десантников и сделал ВДВ элитным родом войск.</p>
+                        <p class="leader-card__quote">«Кто не прыгает — тот не десантник!» — его знаменитое кредо.</p>
+                        <p>Маргелов лично совершил более 1000 прыжков с парашютом, включая прыжки в самых горячих точках мира.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ХРОНОЛОГИЯ ВДВ -->
+    <section class="section">
+        <div class="section__container">
+            <div class="section__header">
+                <p class="section__tag">// ХРОНОЛОГИЯ</p>
+                <h2 class="section__title">ХРОНОЛОГИЯ ВДВ</h2>
+                <div class="section__line"></div>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-item__date">1930</div>
+                    <div class="timeline-item__title">Создание ВДВ</div>
+                    <div class="timeline-item__text">18 августа 1930 года приказом НКО СССР в военных округах были созданы первые воздушно-десантные бригады. Эта дата считается днём рождения ВДВ.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-item__date">1932</div>
+                    <div class="timeline-item__title">Опытные воздушно-десантные части</div>
+                    <div class="timeline-item__text">Создание опытных воздушно-десантных частей и подготовка первых десантников.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-item__date">1933</div>
+                    <div class="timeline-item__title">Военная академия</div>
+                    <div class="timeline-item__text">Открытие Военно-транспортной академии ВВС Красной Армии для подготовки командных кадров.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-item__date">1938</div>
+                    <div class="timeline-item__title">Корпус ВДВ</div>
+                    <div class="timeline-item__text">Создание корпуса ВДВ в составе 8 дивизий. ВДВ становятся самостоятельным видом войск.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-item__date">1941-1945</div>
+                    <div class="timeline-item__title">Великая Отечественная война</div>
+                    <div class="timeline-item__text">Десантники участвуют в обороне Москвы, Киева, Сталинграда. Десятки тысяч десантников награждены орденами и медалями.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-item__date">1946</div>
+                    <div class="timeline-item__title">Рязанское ВВДКУ</div>
+                    <div class="timeline-item__text">Создание Рязанского гвардейского высшего воздушно-десантного командного училища.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-item__date">1950-1980</div>
+                    <div class="timeline-item__title">Холодная война</div>
+                    <div class="timeline-item__text">Создание воздушно-десантных дивизий по всему СССР. Регулярные учения "Десант" и "Буря".</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-item__date">1991</div>
+                    <div class="timeline-item__title">Распад СССР</div>
+                    <div class="timeline-item__text">ВДН переходят под юрисдикцию Российской Федерации. Многие части расформированы.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-item__date">2008</div>
+                    <div class="timeline-item__title">Война в Грузии</div>
+                    <div class="timeline-item__text">76-я дшд героически обороняет аэропорт Горка-2 в Южной Осетии.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-item__date">2014</div>
+                    <div class="timeline-item__title">Крым</div>
+                    <div class="timeline-item__text">Десантники принимают участие в присоединении Крыма к России.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-item__date">2022-2026</div>
+                    <div class="timeline-item__title">СВО</div>
+                    <div class="timeline-item__text">Десантники активно участвуют в Специальной военной операции на Украине.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="section__container">
+            <div class="section__header">
+                <p class="section__tag">// ПОДРАЗДЕЛЕНИЯ ВДВ</p>
+                <h2 class="section__title">СТРУКТУРА ВОЗДУШНО-ДЕСАНТНЫХ ВОЙСК</h2>
+                <div class="section__line"></div>
+            </div>
+            <div class="emblems-grid">
+                <a href="division-106th.html" class="emblem">
+                    <img src="Great_emblem_of_the_106th_Guards_Airborne_Division.svg" alt="106-я гв.д.">
+                    <span>106-я гв.д.</span>
+                </a>
+                <a href="division-76th.html" class="emblem">
+                    <img src="Great_emblem_of_the_76th_Guards_Air_Assault_Division.svg" alt="76-я дшд.">
+                    <span>76-я дшд.</span>
+                </a>
+                <a href="division-98th.html" class="emblem">
+                    <img src="Great_emblem_of_the_98th_Guards_Airborne_Division.svg" alt="98-я гв.д.">
+                    <span>98-я гв.д.</span>
+                </a>
+                <a href="division-45th.html" class="emblem">
+                    <img src="Great_emblem_of_the_45th_Guards_Spetznaz_Brigade.svg" alt="45-й СПЦ">
+                    <span>45-й СПЦ</span>
+                </a>
+                <a href="division-83rd.html" class="emblem">
+                    <img src="Great_emblem_of_the_83rd_Guards_Air_Assault_Brigade.svg" alt="83-я дшб.">
+                    <span>83-я дшб.</span>
+                </a>
+                <a href="division-242nd.html" class="emblem">
+                    <img src="Great_emblem_of_the_242nd_Training_Centre.svg" alt="242-й уч.центр">
+                    <span>242-й уч.центр</span>
+                </a>
+                <a href="division-7th.html" class="emblem">
+                    <img src="Great_emblem_of_the_7th_Guards_Mountain_Air_Assault_Division.svg" alt="7-я гв.дшд.">
+                    <span>7-я гв.дшд.</span>
+                </a>
+                <a href="division-31st.html" class="emblem">
+                    <img src="Great_emblem_of_the_31st_Guards_Air_Assault_Brigade.svg" alt="31-я гв.пд">
+                    <span>31-я гв.пд</span>
+                </a>
+                <a href="division-ryazan.html" class="emblem">
+                    <img src="Great_emblem_of_the_Ryazan_Guards_Higher_Airborne_Command_School.svg" alt="Рязанское училище">
+                    <span>Рязанское училище</span>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p class="footer__text">© 2026 ИГОО ВДВ «Союз Десантников». Все права защищены.</p>
+    </footer>
+</body>
+</html>
